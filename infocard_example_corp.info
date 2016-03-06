@@ -1,0 +1,36 @@
+#
+# This is example of corp InfoCard for EmerCoin Info system
+# This card will be retrieved by reference to NVS from EMCSSL subsystem,
+# or imported by another card.
+#
+# All fields are OPTIONAL
+#
+# Syntax:
+# Keyword (whitespaces) value
+# If keyword is omitted, value will be added as additional element
+# into values list, reference by this keyword (see HomeAddress following).
+#
+# Card can contain reference to "parent" card(s) with syntax like:
+# Import info:569dcc6b7aee11375b76:62615c3f6f62096b68bbc980c153917d505f8d24	
+#
+# By default, value(s) from current INFO file overwrite values from parent's one
+# To change merging behavior, use qualifiers at keyword:
+# KeyWord+	- Parent's list will be added after current list
+# +KeyWord	- Parent's list will be added before current list
+# KeyWord with no params - clear this value from resulting card
+#
+# 
+#
+BusinessAddress
+	Kucuk Ayasofya Cad. Kapi Agasi		# Free form address
+	Sok. No:55				# Free form address 
+	Sultanahmet, Fatih			# Free form address
+	Istanbul				# City
+	34400					# ZIP code
+	Turkey					# Country
+WorkPhone	+90-555-123-4568
+Email		info@bubbleinflators.com
+WEB		http://www.bubbleinflators.com
+Facebook	BubbleInflators
+Twitter		BubbleInflators
+
