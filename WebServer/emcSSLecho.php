@@ -82,8 +82,11 @@ function emcssl_validate() {
     if($nvs['expires_in'] <= 0)
       return "NVS record expired, and is not trustable";
 
+    // NVS lines; 1st contains hash_algo=hash_value
+    $lines = explode(PHP_EOL, $nvs['value']);
+
     // Compute certificate fingerprint, using algo, defined in the NVS value
-    list($algo, $emc_fp) = explode('=', $nvs['value']);
+    list($algo, $emc_fp) = explode('=', $lines[0]);
     $crt_fp = hash($algo, 
                    base64_decode(
                      preg_replace('/\-+BEGIN CERTIFICATE\-+|-+END CERTIFICATE\-+|\n|\r/',
@@ -134,7 +137,8 @@ function emcssl_infocard($ic_ref) {
        }
        $fh = popen("openssl aes-256-cbc -d -pass pass:$passwd | zcat > $cached_path", "wb");
        # PHP automatically treadt binary as UTF-8, and convert to unicode, so need decode back
-       fwrite($fh, utf8_decode($nvs['value']));
+       #fwrite($fh, utf8_decode($nvs['value'])); # needed for 0.6.3 wallet 
+       fwrite($fh, $nvs['value']); # for wallet 0.7.0+
        pclose($fh);
     } catch(Exception $e) {
       touch($cached_path);
