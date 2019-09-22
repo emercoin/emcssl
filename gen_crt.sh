@@ -36,7 +36,7 @@ echo "Please, enter password for certificate package."
 echo "You will use this password, when install certificate into browser"
 
 openssl pkcs12 -export -in $SERIAL.crt -inkey $SERIAL.key \
-            -certfile $CA_DIR/emcssl_ca.crt -out $SERIAL.p12  || exit 1
+               -out $SERIAL.p12  || exit 1
 
 #openssl x509 -noout -text -in $SERIAL.crt
 
