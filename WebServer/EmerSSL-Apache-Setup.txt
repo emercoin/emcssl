@@ -1,0 +1,36 @@
+# Emercoin daemon setup
+sudo su
+apt -y install software-properties-common apt-utils dnsutils apt-transport-https curl pkg-php-tools git traceroute mlocate libcurl4-openssl-dev libjansson-dev apache2-ssl-dev bruteforce-salted-openssl
+apt-key adv --keyserver keyserver.ubuntu.com --recv B58C58F4
+add-apt-repository 'deb http://download.emercoin.com/debian jessie emercoin'
+apt update && apt -y install emercoin
+echo emcdns=1 >> /etc/emercoin/emercoin.conf
+echo emcdnsport=5335 >> /etc/emercoin/emercoin.conf
+systemctl enable emercoind
+systemctl start emercoind
+
+
+# EmerSSL server configuration
+cd /var/www/html
+git clone https://github.com/emercoin/emcssl
+extract emcssl_login_example.tar.gz in /var/www/html/emcssl  # Fetch from https://github.com/emercoin/emcssl
+sh /var/www/html/emcssl/webserver/list-crt.sh > /etc/ssl/certs/emcssl_ca.crt
+
+Take note of the emccoinrpc password in /etc/emercoin/emercoin.conf and configure config and config-lite.php with the right credentials
+
+nano /etc/apache2/sites-available/default-ssl.conf
+SSLCACertificatePath /etc/ssl/certs
+SSLCACertificateFile /etc/ssl/certs/emcssl_ca.crt
+
+   <Location /emcssl>
+    SSLVerifyClient require
+    SSLVerifyDepth 1
+    SSLOptions +StdEnvVars +ExportCertData
+   </Location>
+
+a2enmod ssl
+a2ensite default-ssl
+
+service apache2 stop
+service apache2 start
+

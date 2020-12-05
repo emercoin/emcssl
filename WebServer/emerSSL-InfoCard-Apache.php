@@ -1,11 +1,23 @@
 <?php
-// *** emcSSL demo ***
+// *** emerSSL demo ***
 // Don't use external modules
 // Can work with remote EMC-wallet, all data exchange by JSON only
 //
 // Program prints (echoes) parameter of client's emcSSL certificate
 // and InfoCard fields
 
+// To succesfully run, need setup Apache
+// 1. Generate fake emerSSL CA list:
+//   sh ./WebServer/list-crt.sh > /etc/ssl/certs/emcssl_ca.crt
+// And setup it in Apache config params:
+//  SSLCACertificatePath /etc/ssl/certs
+//  SSLCACertificateFile /etc/ssl/certs/emcssl_ca.crt
+// 2. Request client certificate, and export it into CGI-environment:
+//   <Location /emcssl> # or whatever else
+//    SSLVerifyClient require
+//    SSLVerifyDepth 1
+//    SSLOptions +StdEnvVars +ExportCertData
+//   </Location>
 
 // show errors right in browser
 error_reporting(E_ALL);
@@ -23,7 +35,8 @@ $emc_infocard = array();
 $emc_infocard_limit = 20;
 
 # Need create this directory, and allow read for www-owner with command like
-$emc_infocard_cache_path = "/var/tmp/infocard";
+# On CentOS, impossible to use /tmp or /var/tmp since sticky bit "t"
+$emc_infocard_cache_path = "/var/www/tmp/infocard";
 
 //------------------------------------------------------------------------------
 // Performs name_show NVS-request to EMC wallet
@@ -130,15 +143,14 @@ function emcssl_infocard($ic_ref) {
   // If cached file too old (10+min) or non exist - read from NVS and create it
   if(!file_exists($cached_path) || time() - filemtime($cached_path) > 600) {
     try {
-      $nvs = emcssl_NVS_req(array("info:$key"));
+      $nvs = emcssl_NVS_req(array("info:$key", 'base64'));
        if($nvs['expires_in'] <= 0) {
          touch($cached_path);
          return "NVS record expired, and is not trustable";
        }
        $fh = popen("openssl aes-256-cbc -d -pass pass:$passwd | zcat > $cached_path", "wb");
        # PHP automatically treadt binary as UTF-8, and convert to unicode, so need decode back
-       #fwrite($fh, utf8_decode($nvs['value'])); # needed for 0.6.3 wallet 
-       fwrite($fh, $nvs['value']); # for wallet 0.7.0+
+       fwrite($fh, base64_decode($nvs['value'])); # for wallet 0.7.0+
        pclose($fh);
     } catch(Exception $e) {
       touch($cached_path);
