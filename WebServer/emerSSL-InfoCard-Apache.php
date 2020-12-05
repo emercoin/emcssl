@@ -117,8 +117,8 @@ function emcssl_validate() {
 // Populate global array $emc_infocard
 // 
 // Before InfoCard usage:
-//   mkdir /var/tmp/infocard/
-//   chown www-data /var/tmp/infocard/
+//   mkdir /var/www/tmp/infocard/
+//   chown www-data /var/www/tmp/infocard/
 //
 
 function emcssl_infocard($ic_ref) {
