@@ -14,7 +14,7 @@ systemctl start emercoind
 # Fetch from https://github.com/emercoin/emcssl
 cd /var/www/html
 git clone https://github.com/emercoin/emcssl
-sh /var/www/html/emcssl/webserver/list-crt.sh > /etc/ssl/certs/emcssl_ca.crt
+sh /var/www/html/emcssl/WebServer/crt-list.sh > /etc/ssl/certs/emcssl_ca.crt
 
 Take note of the emccoinrpc password in /etc/emercoin/emercoin.conf and configure config and config-lite.php with the right credentials
 
@@ -33,4 +33,9 @@ a2ensite default-ssl
 
 service apache2 stop
 service apache2 start
+
+UPD Dec, 6, 2020:
+I encountered errors on my servers about Post-Handshake Authentication.
+To solve add in default-ssl.conf:
+        SSLProtocol -all +TLSv1.2 in default-ssl.conf
 
