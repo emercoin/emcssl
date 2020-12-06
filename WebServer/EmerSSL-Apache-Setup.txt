@@ -35,7 +35,12 @@ service apache2 stop
 service apache2 start
 
 UPD Dec, 6, 2020:
-I encountered errors on my servers about Post-Handshake Authentication.
+I encountered errors on my servers about Post-Handshake Authentication with Mozilla.
 To solve add in default-ssl.conf:
         SSLProtocol -all +TLSv1.2 in default-ssl.conf
-
+See more:
+https://stackoverflow.com/questions/53062504/apache-2-4-37-with-openssl-1-1-1-cannot-perform-post-handshake-authentication
+To summarize: since Firefox 68.0 the support has been implemented, but it is disabled by default and needs to be enabled 
+by changing the about:config setting security.tls.enable_post_handshake_auth to true. The reason for this is that TLS 1.3 
+post-handshake authentication works with HTTP/1.1 but has problems with HTTP/2 multiplexing, and the necessary mechanism 
+to fill the gap for HTTP/2 is still in draft phase.
