@@ -17,7 +17,7 @@ git clone https://github.com/emercoin/emcssl
 sh /var/www/html/emcssl/WebServer/crt-list.sh > /etc/ssl/certs/emcssl_ca.crt
 
 Take rpcpassword from the file: /var/lib/emc/.emercoin/emercoin.conf
-and create file config-lite.php, contains single credential line, contains this passowrd:
+and create file config-lite.php, contains single credential line, contains this password:
 
 $emcCONNECT = "http://emccoinrpc:secret_rpcpassword_from_emercoin.conf@localhost:6662";
 
