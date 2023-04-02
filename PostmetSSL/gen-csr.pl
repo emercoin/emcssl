@@ -1,7 +1,7 @@
 #!/usr/local/bin/perl -w
 # Generate CSR request to Postmet for SSL-certificate for your domain
 # in the emerDNS alternative domain zones.
-# To generate, run this program with paremeter - your domain, for example:
+# To generate, run this program with parameter - your domain, for example:
 #   ./gen-csr.pl my-domain.emc
 # Before usage, edit file req_san_template.conf, change fields: C/ST/L/O/OU
 # After generated, submit freshly generate CSR for to: https://www.postmet.com/csr/
