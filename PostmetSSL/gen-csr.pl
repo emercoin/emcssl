@@ -10,8 +10,8 @@ my $domain = $ARGV[0];
 
 die "Usage:\n\t $0 your_domain_name\n\n" unless defined $domain;
 
-open(SAMPLE, "req_san_template.conf") || die "Unable open req_san_template.conf, reason: $!\n";
-open(CF, ">$domain.cf") || die "Unable write $domain.san, reason: $!\n";
+open(SAMPLE, "req_san_template.conf") || die "Unable to open req_san_template.conf, reason: $!\n";
+open(CF, ">$domain.cf") || die "Unable to write $domain.cf, reason: $!\n";
 while(<SAMPLE>) {
     s/domain\.lib/$domain/g;
     print CF;
