@@ -3,7 +3,7 @@
 # in the emerDNS alternative domain zones.
 # To generate, run this program with parameter - your domain, for example:
 #   ./gen-csr.pl my-domain.emc
-# Before usage, edit file req_san_template.conf, change fields: C/ST/L/O/OU
+#
 # After generated, submit freshly generate CSR for to: https://www.postmet.com/csr/
 
 my $domain = $ARGV[0];
@@ -19,8 +19,9 @@ while(<SAMPLE>) {
 close CF;
 
 # Orig RSA request from Postmet
-# exec "openssl req -new -out $domain.csr -newkey rsa:2048 -nodes -sha256 -keyout $domain.key -config $domain.san";
+exec "openssl req -new -out $domain.csr -newkey rsa:2048 -nodes -sha256 -keyout $domain.key -config $domain.cf";
 
-exec "openssl ecparam -out  $domain.key -name secp256k1 -genkey && "
-   . "openssl req -new -key $domain.key -out $domain.csr -sha256 -config $domain.cf"
+# Temporary blocked
+#exec "openssl ecparam -out  $domain.key -name secp384r1 -genkey && "
+#   . "openssl req -new -key $domain.key -out $domain.csr -sha256 -config $domain.cf"
 
